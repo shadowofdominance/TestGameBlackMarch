@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TIleSelector : MonoBehaviour
+public class TileSelector : MonoBehaviour
 {
     public Camera cam;
     public UIManager uimanager;
@@ -12,12 +12,18 @@ public class TIleSelector : MonoBehaviour
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
 
-        if(Physics.Raycast(ray, out hit))
+        //Updating the UI if the mouse hovers over the tile!
+        if (Physics.Raycast(ray, out hit))
         {
             TileLocation tile = hit.collider.GetComponentInParent<TileLocation>();
             if (tile != null)
             {
-                uimanager.UpdateTileInfo($"Tile: ({tile}")
+                uimanager.UpdateUI($"Tile: ({tile.x}, {tile.y})");
             }
+            else
+            {
+                uimanager.UpdateUI("Tile Co-Ordinates: --");
+            }
+        }
     }
 }
