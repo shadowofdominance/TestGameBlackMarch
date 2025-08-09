@@ -51,15 +51,12 @@ public class PlayerController : MonoBehaviour
 
         Enemybot enemy = FindObjectOfType<Enemybot>();
         if (enemy != null)
-        {
-            Debug.Log("Triggering enemy turn...");
             enemy.Takeaturn(new Vector2Int(targetX, targetY));
-        }
     }
 
     public List<Vector2Int> BFSPathfinding(int startX, int startY, int goalX, int goalY)
     {
-        Vector2Int[] directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
+        Vector2Int[] direction = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
         bool[,] visited = new bool[10, 10];
         Dictionary<Vector2Int, Vector2Int> cameFrom = new Dictionary<Vector2Int, Vector2Int>();
 
@@ -75,7 +72,7 @@ public class PlayerController : MonoBehaviour
             Vector2Int current = queue.Dequeue();
             if (current == goal) break;
 
-            foreach (var dir in directions)
+            foreach (var dir in direction)
             {
                 Vector2Int next = current + dir;
 
