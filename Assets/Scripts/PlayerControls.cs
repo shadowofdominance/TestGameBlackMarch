@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float moveSpeed = 3f;
-    public GridManager gridManager;
+    public GridManager gridManager; // reference to your grid
     public ObstacleData obstacleData;
 
     private bool isMoving = false;
@@ -31,10 +31,11 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator MoveToTile(int targetX, int targetY)
     {
-        // Get path
+        // Getting the path for the goal grid
         List<Vector2Int> path = BFSPathfinding((int)transform.position.x, (int)transform.position.z, targetX, targetY);
 
-        if (path == null) yield break; // No path
+        if (path == null) 
+            yield break; // No path
 
         isMoving = true;
         foreach (Vector2Int step in path)
@@ -47,9 +48,16 @@ public class PlayerController : MonoBehaviour
             }
         }
         isMoving = false;
+
+        Enemybot enemy = FindObjectOfType<Enemybot>();
+        if (enemy != null)
+        {
+            Debug.Log("Triggering enemy turn...");
+            enemy.Takeaturn(new Vector2Int(targetX, targetY));
+        }
     }
 
-    List<Vector2Int> BFSPathfinding(int startX, int startY, int goalX, int goalY)
+    public List<Vector2Int> BFSPathfinding(int startX, int startY, int goalX, int goalY)
     {
         Vector2Int[] directions = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
         bool[,] visited = new bool[10, 10];

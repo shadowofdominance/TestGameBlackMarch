@@ -17,13 +17,10 @@ public class TileSelector : MonoBehaviour
         {
             TileLocation tile = hit.collider.GetComponentInParent<TileLocation>();
             if (tile != null)
-            {
                 uimanager.UpdateUI($"Tile: ({tile.x}, {tile.y})");
-            }
             else
-            {
                 uimanager.UpdateUI("Tile Co-Ordinates: --");
-            }
+
         }
     }
 }
