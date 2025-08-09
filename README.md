@@ -1,4 +1,5 @@
 # Test Game App
+- The scene is located inside Assets/Scenes/SampleScene
 
 ## Features Implemented
 
