@@ -41,11 +41,14 @@ public class PlayerController : MonoBehaviour
         foreach (Vector2Int step in path)
         {
             Vector3 targetPos = new Vector3(step.x, transform.position.y, step.y);
+
+            transform.position = new Vector3(Mathf.Round(transform.position.x), transform.position.y, Mathf.Round(transform.position.z));
             while (Vector3.Distance(transform.position, targetPos) > 0.01f)
             {
                 transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
                 yield return null;
             }
+            transform.position = new Vector3(Mathf.Round(transform.position.x), transform.position.y, Mathf.Round(transform.position.z));
         }
         isMoving = false;
 
@@ -54,11 +57,15 @@ public class PlayerController : MonoBehaviour
             enemy.Takeaturn(new Vector2Int(targetX, targetY));
     }
 
+    public Transform enemyTrans;
+
     public List<Vector2Int> BFSPathfinding(int startX, int startY, int goalX, int goalY)
     {
         Vector2Int[] direction = { Vector2Int.up, Vector2Int.down, Vector2Int.left, Vector2Int.right };
         bool[,] visited = new bool[10, 10];
         Dictionary<Vector2Int, Vector2Int> cameFrom = new Dictionary<Vector2Int, Vector2Int>();
+
+        Vector2Int enemyPos = new Vector2Int(Mathf.RoundToInt(enemyTrans.position.x), Mathf.RoundToInt(enemyTrans.position.z));
 
         Queue<Vector2Int> queue = new Queue<Vector2Int>();
         Vector2Int start = new Vector2Int(startX, startY);
@@ -70,16 +77,16 @@ public class PlayerController : MonoBehaviour
         while (queue.Count > 0)
         {
             Vector2Int current = queue.Dequeue();
-            if (current == goal) break;
+            if (current == goal) 
+                break;
 
             foreach (var dir in direction)
             {
                 Vector2Int next = current + dir;
-
                 if (next.x >= 0 && next.x < 10 && next.y >= 0 && next.y < 10)
                 {
                     int index = next.y * 10 + next.x;
-                    if (!visited[next.x, next.y] && !obstacleData.obstaclearray[index])
+                    if (!visited[next.x, next.y] && !obstacleData.obstaclearray[index] && next != enemyPos)
                     {
                         queue.Enqueue(next);
                         visited[next.x, next.y] = true;
@@ -89,7 +96,8 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (!cameFrom.ContainsKey(goal)) return null;
+        if (!cameFrom.ContainsKey(goal)) 
+            return null;
 
         // Rebuild path
         List<Vector2Int> path = new List<Vector2Int>();

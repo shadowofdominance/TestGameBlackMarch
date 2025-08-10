@@ -56,11 +56,14 @@ public class Enemybot : MonoBehaviour, InterfaceAi
         foreach (Vector2Int step in bestPath)
         {
             Vector3 targetPos = new Vector3(step.x, transform.position.y, step.y);
+
+            transform.position = new Vector3(Mathf.Round(transform.position.x), transform.position.y, Mathf.Round(transform.position.z));
             while (Vector3.Distance(transform.position, targetPos) > 0.01f)
             {
                 transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
                 yield return null;
             }
+            transform.position = new Vector3(Mathf.Round(transform.position.x), transform.position.y, Mathf.Round(transform.position.z));
         }
         isMoving = false;
     }
